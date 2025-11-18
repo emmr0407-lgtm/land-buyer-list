@@ -1,127 +1,51 @@
-"use client";
-
-import { useState } from "react";
-
-export default function Home() {
-    const [name, setName] = useState("");
-    const [phone, setPhone] = useState("");
-    const [email, setEmail] = useState("");
-    const [location, setLocation] = useState("");
-    const [acreage, setAcreage] = useState("");
-    const [budget, setBudget] = useState("");
-    const [saving, setSaving] = useState(false);
-
-    async function handleSubmit(e: React.FormEvent) {
-        e.preventDefault();
-        setSaving(true);
-
-        try {
-            const response = await fetch("/api/submit", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    name,
-                    phone,
-                    email,
-                    location,
-                    acreage,
-                    budget,
-                }),
-            });
-
-            const json = await response.json();
-
-            if (!response.ok) {
-                alert("Error: " + json.error);
-            } else {
-                alert("Success! Your info was saved.");
-            }
-        } catch (err: any) {
-            alert("Error: " + err.message);
-        }
-
-        setSaving(false);
-    }
-
+export default function HomePage() {
     return (
-        <div style={{ maxWidth: "700px", margin: "50px auto" }}>
-            <h1 style={{ textAlign: "center", marginBottom: "30px" }}>
-                Join the Land Buyers List
-            </h1>
+        <main className="min-h-screen bg-white">
+            {/* HERO SECTION */}
+            <section className="w-full bg-gradient-to-b from-blue-600 to-blue-500 text-white py-24 px-6 text-center">
+                <h1 className="text-5xl font-bold mb-6">
+                    Sell Your Land Fast – Guaranteed Buyer Leads
+                </h1>
+                <p className="text-xl max-w-2xl mx-auto mb-10 opacity-90">
+                    Build your own instant buyer list and start generating offers within days,
+                    not months. No agents. No waiting. No stress.
+                </p>
 
-            <form onSubmit={handleSubmit}>
-                <input
-                    placeholder="Name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                    style={inputStyle}
-                />
+                <a
+                    href="#join"
+                    className="inline-block bg-white text-blue-600 font-semibold py-3 px-8 rounded-lg shadow-lg hover:bg-gray-100 transition"
+                >
+                    Build My Buyer List →
+                </a>
+            </section>
 
-                <input
-                    placeholder="Phone"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    required
-                    style={inputStyle}
-                />
+            {/* VALUE SECTION */}
+            <section id="join" className="py-20 px-8 max-w-5xl mx-auto text-center">
+                <h2 className="text-3xl font-bold mb-6">How It Works</h2>
 
-                <input
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    style={inputStyle}
-                />
+                <div className="grid md:grid-cols-3 gap-10 mt-12">
+                    <div className="p-6 border rounded-xl shadow-sm">
+                        <h3 className="text-xl font-semibold mb-3">1. Enter Your Land Info</h3>
+                        <p className="text-gray-600">
+                            Submit your details so buyers know exactly what you’re offering.
+                        </p>
+                    </div>
 
-                <input
-                    placeholder="Location"
-                    value={location}
-                    onChange={(e) => setLocation(e.target.value)}
-                    required
-                    style={inputStyle}
-                />
+                    <div className="p-6 border rounded-xl shadow-sm">
+                        <h3 className="text-xl font-semibold mb-3">2. Get Added to Buyer List</h3>
+                        <p className="text-gray-600">
+                            We match your property to investors actively buying land.
+                        </p>
+                    </div>
 
-                <input
-                    placeholder="Desired Acreage"
-                    value={acreage}
-                    onChange={(e) => setAcreage(e.target.value)}
-                    required
-                    style={inputStyle}
-                />
-
-                <input
-                    placeholder="Budget Range"
-                    value={budget}
-                    onChange={(e) => setBudget(e.target.value)}
-                    required
-                    style={inputStyle}
-                />
-
-                <button type="submit" style={buttonStyle} disabled={saving}>
-                    {saving ? "Saving..." : "Submit"}
-                </button>
-            </form>
-        </div>
+                    <div className="p-6 border rounded-xl shadow-sm">
+                        <h3 className="text-xl font-semibold mb-3">3. Receive Offers Fast</h3>
+                        <p className="text-gray-600">
+                            Buyers contact you directly — no middlemen or commissions.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </main>
     );
 }
-
-const inputStyle: React.CSSProperties = {
-    width: "100%",
-    padding: "12px",
-    marginBottom: "15px",
-    borderRadius: "6px",
-    border: "1px solid #ccc",
-    fontSize: "16px",
-};
-
-const buttonStyle: React.CSSProperties = {
-    width: "100%",
-    padding: "14px",
-    background: "#333",
-    color: "#fff",
-    border: "none",
-    borderRadius: "6px",
-    fontSize: "18px",
-    cursor: "pointer",
-};
