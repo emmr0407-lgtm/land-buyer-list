@@ -1,60 +1,27 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabaseClient";
+import { createClient } from "@supabase/supabase-js";
 
 export async function POST(req: Request) {
     try {
-        // Parse JSON body
         const body = await req.json();
 
-        const {
-            name,
-            phone,
-            email,
-            location,
-            acreage,
-            budget
-        } = body;
-
-        // Validate required fields (basic check)
-        if (!name || !phone || !email) {
-            return NextResponse.json(
-                { error: "Missing required fields" },
-                { status: 400 }
-            );
-        }
-
-        // Insert into Supabase
-        const { error } = await supabase
-            .from("buyer")
-            .insert([
-                {
-                    name,
-                    phone,
-                    email,
-                    location,
-                    acreage,
-                    budget
-                }
-            ]);
-
-        if (error) {
-            console.error("❌ Supabase Insert Error:", error);
-            return NextResponse.json(
-                { error: error.message },
-                { status: 500 }
-            );
-        }
-
-        return NextResponse.json(
-            { message: "Success" },
-            { status: 200 }
+        const supabase = createClient(
+            process.env.PUBLIC_SUPABASE_URL!,
+            process.env.PUBLIC_SUPABASE_ANON_KEY!
         );
 
+        const { data, error } = await supabase
+            .from("land_leads")
+            .insert([body]);
+
+        if (error) throw error;
+
+        return NextResponse.json({ message: "Success", data });
     } catch (err: any) {
-        console.error("❌ Route Error:", err);
         return NextResponse.json(
-            { error: "Invalid JSON or server error" },
+            { error: err.message },
             { status: 500 }
         );
     }
 }
+

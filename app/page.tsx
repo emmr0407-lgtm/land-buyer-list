@@ -1,22 +1,24 @@
-export default function Home() {
+export default function HomePage() {
     return (
-        <main className="min-h-screen flex flex-col items-center justify-center bg-gray-50 text-gray-800 px-6">
-            <section className="text-center max-w-2xl">
-                <h1 className="text-5xl font-bold mb-6">
-                    Land Buyer List
-                </h1>
+        <div style={{ maxWidth: "500px", margin: "80px auto", textAlign: "center" }}>
+            <h1>Land Buyer List</h1>
+            <p>Join the list to get notified about land opportunities.</p>
 
-                <p className="text-lg mb-8">
-                    Submit your details and get instant access to motivated land buyers.
-                </p>
-
-                <a
-                    href="/submit"
-                    className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-                >
-                    Get Started
-                </a>
-            </section>
-        </main>
+            <a
+                href="/submit"
+                style={{
+                    marginTop: "30px",
+                    display: "inline-block",
+                    padding: "10px 20px",
+                    background: "#000",
+                    color: "#fff",
+                    textDecoration: "none",
+                    borderRadius: "4px"
+                }}
+            >
+                Join Buyer List
+            </a>
+        </div>
     );
 }
+
