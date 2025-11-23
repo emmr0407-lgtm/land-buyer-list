@@ -5,15 +5,13 @@ export async function POST(req: Request) {
     try {
         const body = await req.json();
 
-        // Initialize Supabase client
         const supabase = createClient(
             process.env.NEXT_PUBLIC_SUPABASE_URL!,
             process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
         );
 
-        // Insert into the "leads" table
         const { data, error } = await supabase
-            .from("leads")
+            .from("buyers")
             .insert([body]);
 
         if (error) throw error;

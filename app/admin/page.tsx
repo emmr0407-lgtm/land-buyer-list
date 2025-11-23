@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 
-type Lead = {
+type Buyer = {
     id: string;
     name?: string;
     email?: string;
@@ -12,29 +12,29 @@ type Lead = {
 };
 
 export default function AdminPage() {
-    const [leads, setLeads] = useState<Lead[]>([]);
+    const [buyers, setBuyers] = useState<Buyer[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
-    const fetchLeads = async () => {
+    const fetchBuyers = async () => {
         setLoading(true);
 
         const { data, error } = await supabase
-            .from("leads")
+            .from("buyers")
             .select("*")
             .order("created_at", { ascending: false });
 
         if (error) {
-            console.error("Error fetching leads:", error);
-            setLeads([]);
+            console.error("Error fetching buyers:", error);
+            setBuyers([]);
         } else {
-            setLeads(data || []);
+            setBuyers(data || []);
         }
 
         setLoading(false);
     };
 
     useEffect(() => {
-        fetchLeads();
+        fetchBuyers();
     }, []);
 
     return (
@@ -44,9 +44,9 @@ export default function AdminPage() {
             </h1>
 
             {loading ? (
-                <p>Loading leads...</p>
-            ) : leads.length === 0 ? (
-                <p>No leads found.</p>
+                <p>Loading buyers...</p>
+            ) : buyers.length === 0 ? (
+                <p>No buyers found.</p>
             ) : (
                 <table
                     style={{
@@ -64,14 +64,14 @@ export default function AdminPage() {
                         </tr>
                     </thead>
                     <tbody>
-                        {leads.map((lead) => (
-                            <tr key={lead.id}>
-                                <td style={tdStyle}>{lead.name || "-"}</td>
-                                <td style={tdStyle}>{lead.email || "-"}</td>
-                                <td style={tdStyle}>{lead.phone || "-"}</td>
+                        {buyers.map((buyer) => (
+                            <tr key={buyer.id}>
+                                <td style={tdStyle}>{buyer.name || "-"}</td>
+                                <td style={tdStyle}>{buyer.email || "-"}</td>
+                                <td style={tdStyle}>{buyer.phone || "-"}</td>
                                 <td style={tdStyle}>
-                                    {lead.created_at
-                                        ? new Date(lead.created_at).toLocaleDateString()
+                                    {buyer.created_at
+                                        ? new Date(buyer.created_at).toLocaleDateString()
                                         : "-"}
                                 </td>
                             </tr>
@@ -94,5 +94,6 @@ const tdStyle = {
     borderBottom: "1px solid #eee",
     padding: "8px",
 };
+
 
 
