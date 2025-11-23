@@ -39,9 +39,32 @@ export default function AdminPage() {
 
     return (
         <div style={{ padding: "2rem" }}>
-            <h1 style={{ fontSize: "24px", fontWeight: "bold", marginBottom: "1rem" }}>
+            <h1
+                style={{
+                    fontSize: "24px",
+                    fontWeight: "bold",
+                    marginBottom: "1rem",
+                }}
+            >
                 Admin Dashboard
             </h1>
+
+            {/* ✅ CSV DOWNLOAD BUTTON */}
+            <button
+                onClick={() => (window.location.href = "/api/export")}
+                style={{
+                    marginBottom: "1rem",
+                    padding: "8px 16px",
+                    backgroundColor: "#000",
+                    color: "#fff",
+                    border: "none",
+                    cursor: "pointer",
+                    borderRadius: "6px",
+                    fontWeight: "bold",
+                }}
+            >
+                Download CSV
+            </button>
 
             {loading ? (
                 <p>Loading buyers...</p>
@@ -85,8 +108,8 @@ export default function AdminPage() {
 
 const thStyle = {
     textAlign: "left" as const,
-    borderBottom: "2px solid #ddd",
-    padding: "8px",
+    borderBottom: "2px solid "#ddd",
+  padding: "8px",
     fontWeight: "bold",
 };
 
@@ -94,7 +117,3 @@ const tdStyle = {
     borderBottom: "1px solid #eee",
     padding: "8px",
 };
-
-
-
-
