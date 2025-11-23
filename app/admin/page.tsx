@@ -13,7 +13,7 @@ type Buyer = {
 
 export default function AdminPage() {
     const [buyers, setBuyers] = useState<Buyer[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
+    const [loading, setLoading] = useState(true);
 
     const fetchBuyers = async () => {
         setLoading(true);
@@ -94,6 +94,7 @@ const tdStyle = {
     borderBottom: "1px solid #eee",
     padding: "8px",
 };
+
 
 
 
