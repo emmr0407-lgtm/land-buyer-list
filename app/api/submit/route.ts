@@ -5,23 +5,27 @@ export async function POST(req: Request) {
     try {
         const body = await req.json();
 
+        // Initialize Supabase client
         const supabase = createClient(
-            process.env.PUBLIC_SUPABASE_URL!,
-            process.env.PUBLIC_SUPABASE_ANON_KEY!
+            process.env.NEXT_PUBLIC_SUPABASE_URL!,
+            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
         );
 
+        // Insert into the "leads" table
         const { data, error } = await supabase
-            .from("land_leads")
+            .from("leads")
             .insert([body]);
 
         if (error) throw error;
 
         return NextResponse.json({ message: "Success", data });
     } catch (err: any) {
+        console.error("Submit API Error:", err.message);
         return NextResponse.json(
             { error: err.message },
             { status: 500 }
         );
     }
 }
+
 
