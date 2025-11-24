@@ -5,7 +5,8 @@ export async function POST(request: Request) {
     const { password } = await request.json();
 
     if (password === process.env.ADMIN_PASSWORD) {
-        cookies().set("auth", "true", {
+        const cookieStore = cookies();
+        cookieStore.set("auth", "true", {
             httpOnly: true,
             path: "/",
             maxAge: 60 * 60 * 24, // 24 hours
@@ -16,4 +17,5 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: false }, { status: 401 });
 }
+
 
