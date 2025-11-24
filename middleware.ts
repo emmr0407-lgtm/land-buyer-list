@@ -1,19 +1,19 @@
 import { NextResponse } from "next/server";
 
-export function middleware(request: any) {
-    const password = request.cookies.get("admin_auth")?.value;
-    const isLoggedIn = password === process.env.ADMIN_PASSWORD;
+export function middleware(request: Request) {
+    const isAdminPage = request.url.includes("/admin");
+    const adminPassword = process.env.ADMIN_PASSWORD;
 
-    // If user is not logged in and trying to access /admin
-    if (!isLoggedIn && request.nextUrl.pathname.startsWith("/admin")) {
-        const loginUrl = new URL("/login", request.url);
-        return NextResponse.redirect(loginUrl);
+    // If user is going to /admin and is NOT logged in
+    if (isAdminPage && !request.headers.get("cookie")?.includes(`admin-auth=${adminPassword}`)) {
+        return NextResponse.redirect(new URL("/login", request.url));
     }
 
     return NextResponse.next();
 }
 
 export const config = {
-    matcher: ["/admin", "/admin/:path*"],
+    matcher: ["/admin/:path*"],
 };
+
 
