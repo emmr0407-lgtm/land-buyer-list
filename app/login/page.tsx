@@ -4,9 +4,10 @@ import { useState } from "react";
 
 export default function LoginPage() {
     const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
 
-    const handleLogin = async () => {
+    const handleSubmit = async (e: any) => {
+        e.preventDefault();
+
         const res = await fetch("/api/login", {
             method: "POST",
             body: JSON.stringify({ password }),
@@ -15,45 +16,31 @@ export default function LoginPage() {
         if (res.ok) {
             window.location.href = "/admin";
         } else {
-            setError("Invalid password");
+            alert("Incorrect password");
         }
     };
 
     return (
-        <div style={{ padding: "2rem", maxWidth: "400px", margin: "auto" }}>
-            <h1 style={{ fontSize: "24px", fontWeight: "bold", marginBottom: "1rem" }}>
-                Admin Login
-            </h1>
-            <input
-                type="password"
-                placeholder="Enter admin password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                style={{
-                    width: "100%",
-                    padding: "8px",
-                    marginBottom: "1rem",
-                    border: "1px solid #ccc",
-                    borderRadius: "6px",
-                }}
-            />
-            <button
-                onClick={handleLogin}
-                style={{
-                    padding: "8px 16px",
-                    backgroundColor: "#000",
-                    color: "#fff",
-                    border: "none",
-                    cursor: "pointer",
-                    borderRadius: "6px",
-                    fontWeight: "bold",
-                    width: "100%",
-                }}
-            >
-                Login
-            </button>
-            {error && <p style={{ color: "red", marginTop: "1rem" }}>{error}</p>}
+        <div style={{ padding: "40px" }}>
+            <h1>Admin Login</h1>
+
+            <form onSubmit={handleSubmit} style={{ marginTop: "20px" }}>
+                <input
+                    type="password"
+                    placeholder="Enter Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    style={{ padding: "8px", width: "200px" }}
+                />
+                <button
+                    type="submit"
+                    style={{ marginLeft: "10px", padding: "8px 12px" }}
+                >
+                    Login
+                </button>
+            </form>
         </div>
     );
 }
+
 
