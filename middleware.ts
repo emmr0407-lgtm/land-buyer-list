@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
 
-export function middleware(req: NextRequest) {
-    const isLoggedIn = req.cookies.get("auth")?.value === "true";
+export function middleware(request: any) {
+    const password = request.cookies.get("admin_auth")?.value;
+    const isLoggedIn = password === process.env.ADMIN_PASSWORD;
 
-    // Protect /admin routes
-    if (req.nextUrl.pathname.startsWith("/admin") && !isLoggedIn) {
-        const loginUrl = new URL("/login", req.url);
+    // If user is not logged in and trying to access /admin
+    if (!isLoggedIn && request.nextUrl.pathname.startsWith("/admin")) {
+        const loginUrl = new URL("/login", request.url);
         return NextResponse.redirect(loginUrl);
     }
 
@@ -14,5 +14,6 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-    matcher: ["/admin/:path*", "/admin"],
+    matcher: ["/admin", "/admin/:path*"],
 };
+
