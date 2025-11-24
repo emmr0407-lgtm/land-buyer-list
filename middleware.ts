@@ -1,11 +1,10 @@
 import { NextResponse } from "next/server";
 
 export function middleware(request: Request) {
-    const isAdminPage = request.url.includes("/admin");
-    const hasAuthCookie = request.headers.get("cookie")?.includes("admin-auth=true");
+    const isAdmin = request.url.includes("/admin");
+    const loggedIn = request.headers.get("cookie")?.includes("auth=true");
 
-    // If user is going to /admin and NOT logged in, redirect to /login
-    if (isAdminPage && !hasAuthCookie) {
+    if (isAdmin && !loggedIn) {
         return NextResponse.redirect(new URL("/login", request.url));
     }
 
