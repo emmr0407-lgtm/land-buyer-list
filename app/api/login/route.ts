@@ -3,19 +3,20 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
     const { password } = await req.json();
 
-    // Check password
+    // Check the password against your env var
     if (password === process.env.ADMIN_PASSWORD) {
-        const response = NextResponse.json({ success: true });
+        const res = NextResponse.json({ success: true });
 
-        // ✅ Correct cookie handling
-        response.cookies.set("admin-auth", "true", {
+        // Set an auth cookie
+        res.cookies.set("auth", "true", {
             httpOnly: true,
             path: "/",
         });
 
-        return response;
+        return res;
     }
 
     return NextResponse.json({ success: false }, { status: 401 });
 }
+
 
