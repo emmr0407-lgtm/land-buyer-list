@@ -3,83 +3,55 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 
-type Buyer = {
+interface Lead {
     id: string;
-    name?: string;
-    email?: string;
-    phone?: string;
-    created_at?: string;
-};
+    name: string;
+    email: string;
+    phone: string;
+    created_at: string;
+}
 
 export default function AdminPage() {
-    const [buyers, setBuyers] = useState<Buyer[]>([]);
+    const [leads, setLeads] = useState<Lead[]>([]);
     const [loading, setLoading] = useState(true);
 
-    const fetchBuyers = async () => {
-        setLoading(true);
-
+    const fetchLeads = async () => {
         const { data, error } = await supabase
             .from("buyers")
             .select("*")
             .order("created_at", { ascending: false });
 
-        if (error) {
-            console.error("Error fetching buyers:", error);
-            setBuyers([]);
-        } else {
-            setBuyers(data || []);
+        if (!error && data) {
+            setLeads(data as Lead[]);
         }
 
         setLoading(false);
     };
 
     useEffect(() => {
-        fetchBuyers();
+        fetchLeads();
     }, []);
 
     return (
-        <div style={{ padding: "2rem" }}>
-            <h1
-                style={{
-                    fontSize: "24px",
-                    fontWeight: "bold",
-                    marginBottom: "1rem",
-                }}
-            >
-                Admin Dashboard
+        <div style={{ padding: "40px" }}>
+            <h1 style={{ fontSize: "32px", fontWeight: "bold", marginBottom: "20px" }}>
+                Buyer Leads
             </h1>
 
-            {/* ✅ CSV DOWNLOAD BUTTON */}
-            <button
-                onClick={() => (window.location.href = "/api/export")}
-                style={{
-                    marginBottom: "1rem",
-                    padding: "8px 16px",
-                    backgroundColor: "#000",
-                    color: "#fff",
-                    border: "none",
-                    cursor: "pointer",
-                    borderRadius: "6px",
-                    fontWeight: "bold",
-                }}
-            >
-                Download CSV
-            </button>
-
             {loading ? (
-                <p>Loading buyers...</p>
-            ) : buyers.length === 0 ? (
-                <p>No buyers found.</p>
+                <p>Loading...</p>
+            ) : leads.length === 0 ? (
+                <p>No leads found.</p>
             ) : (
                 <table
                     style={{
                         width: "100%",
                         borderCollapse: "collapse",
-                        marginTop: "1rem",
+                        border: "1px solid #ddd",
                     }}
                 >
                     <thead>
-                        <tr>
+                        <tr style={{ background: "#f5f5f5", textAlign: "left" }}>
                             <th style={thStyle}>Name</th>
                             <th style={thStyle}>Email</th>
                             <th style={thStyle}>Phone</th>
@@ -87,15 +59,13 @@ export default function AdminPage() {
                         </tr>
                     </thead>
                     <tbody>
-                        {buyers.map((buyer) => (
-                            <tr key={buyer.id}>
-                                <td style={tdStyle}>{buyer.name || "-"}</td>
-                                <td style={tdStyle}>{buyer.email || "-"}</td>
-                                <td style={tdStyle}>{buyer.phone || "-"}</td>
+                        {leads.map((lead) => (
+                            <tr key={lead.id}>
+                                <td style={tdStyle}>{lead.name}</td>
+                                <td style={tdStyle}>{lead.email}</td>
+                                <td style={tdStyle}>{lead.phone}</td>
                                 <td style={tdStyle}>
-                                    {buyer.created_at
-                                        ? new Date(buyer.created_at).toLocaleDateString()
-                                        : "-"}
+                                    {new Date(lead.created_at).toLocaleString()}
                                 </td>
                             </tr>
                         ))}
@@ -107,13 +77,12 @@ export default function AdminPage() {
 }
 
 const thStyle = {
-    textAlign: "left" as const,
-    borderBottom: "2px solid "#ddd",
-  padding: "8px",
+    padding: "10px",
+    borderBottom: "2px solid #000",
     fontWeight: "bold",
 };
 
 const tdStyle = {
-    borderBottom: "1px solid #eee",
     padding: "8px",
+    borderBottom: "1px solid #ddd",
 };
