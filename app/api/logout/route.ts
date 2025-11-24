@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
-export async function POST(request: Request) {
-    const cookieStore = cookies();
-    cookieStore.set("auth", "", {
-        expires: new Date(0),
+export async function POST() {
+    cookies().set("admin-auth", "", {
         path: "/",
+        expires: new Date(0),
     });
 
-    return NextResponse.redirect(new URL("/login", request.url));
+    return NextResponse.json({ success: true });
 }
+
